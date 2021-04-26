@@ -255,7 +255,7 @@ function insertNewLog2(){
   var data = document.getElementById("insert_log_data2").value;
   var sms = document.getElementById("insert_log_sms2").value;
   var date = document.getElementById("insert_log_date2").value;
-  // console.log('{"customer_no":"'+customerNo+'","sms":"'+sms+'","data":"'+data+'","date":"'+date+'"}');
+  console.log('{"customer_no":"'+customerNo+'","sms":"'+sms+'","data":"'+data+'","date":"'+date+'"}');
   xhr.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       document.getElementById("customer_no2").value = customerNo;
