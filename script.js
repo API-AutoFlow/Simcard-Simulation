@@ -96,7 +96,7 @@ function activateThis(){
       getActivationHistory();
     }
   };
-  xhr.open("POST", "http://127.0.0.1:2023/insert-sim-status", true);
+  xhr.open("POST", "https://autoflow.navidelyasi.com/insert-sim-status", true);
   xhr.send(msg);
 
 }
@@ -112,7 +112,7 @@ function getActivationHistory(){
         drawPieChart_step1(JSON.parse(this.responseText).last_status_all);
       }
     };
-    xhr.open("POST", "http://127.0.0.1:2022/get-sim-activation", true);
+    xhr.open("POST", "https://autoflow.navidelyasi.com/get-sim-activation", true);
     xhr.send("{\"customer_no\":\"" + customerNoActivation + "\"}");
 }
 
@@ -162,7 +162,7 @@ function createActivationList(myList){
           createSimList(JSON.parse(this.responseText));
       }
     };
-    xhr.open("GET", "http://127.0.0.1:2022/get-sims", true);
+    xhr.open("GET", "https://autoflow.navidelyasi.com/get-sims", true);
     xhr.send();
   }
   function createSimList(myList){
@@ -190,7 +190,7 @@ function createActivationList(myList){
         getAggregatedSimLog_Step2(JSON.parse(this.responseText), needTop);
       }
     };
-    xhr.open("POST", "http://127.0.0.1:2022/aggregated-log", true);
+    xhr.open("POST", "https://autoflow.navidelyasi.com/aggregated-log", true);
     xhr.send("{\"top\":\"" + needTop + "\",\"count\":\"" + needCount + "\"}");
   }
   function getAggregatedSimLog_Step2(logOfData, needTop){
@@ -246,7 +246,7 @@ function insertNewLog(){
       getAggregatedSimLog();
     }
   };
-  xhr.open("POST", "http://127.0.0.1:2023/insert-sim-log", true);
+  xhr.open("POST", "https://autoflow.navidelyasi.com/insert-sim-log", true);
   xhr.send('{"customer_no":"'+customerNo+'","sms":"'+sms+'","data":"'+data+'","date":"'+date+'"}');
 
 }
@@ -277,7 +277,7 @@ function insertNewLog(){
           }
       }
     };
-    xhr.open("POST", "http://127.0.0.1:2022/get-sim-log", true);
+    xhr.open("POST", "https://autoflow.navidelyasi.com/get-sim-log", true);
     xhr.send("{\"customer_no\":\"" + customerNo + "\"}");
   }
   function get3SimLog_step2(logMultiSim){
