@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network</title>
+
+  <link rel="stylesheet" href="styles.css?v=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js" integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js" integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG" crossorigin="anonymous"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body>
+  <div class="row">
+    <div class="col-1"></div>
+    <div class="col-10">
+      <span class="title-h1">Network Use Case</span><span>v0.1.0</span><span style="float:right">Powered by <b>API AutoFlow</b></span>
+      <span id="server-status-message"></span>
+    </div>
+    <div class="col-1"></div>
+  </div>
+  <div class="row m-3">
+    <div class="col-1"></div>
+    <div class="col-10">
+      <ul class="nav nav-pills nav-justified">
+        <li><a href="javascript:rudrSwitchTab('tb_0', 'content_0');" id="tb_0" class="nav-item nav-link active">  SIM Info  </a></li>
+        <li><a href="javascript:rudrSwitchTab('tb_1', 'content_1');" id="tb_1" class="nav-item nav-link">  SIM Log  </a></li>
+        <li><a href="javascript:rudrSwitchTab('tb_2', 'content_2');" id="tb_2" class="nav-item nav-link">  Multi SIM Log  </a></li>
+        <li><a href="javascript:rudrSwitchTab('tb_3', 'content_3');" id="tb_3" class="nav-item nav-link">  SIM Activation Status </a></li>
+      </ul>
+    </div>
+    <div class="col-1"></div>
+    <hr>
+  </div>
+  
+
+  <!-- --------------------------------------------------------------------------------------- -->
+  <!-- --------------------------------------------------------------------------------------- -->
+  <!-- --------------------------------------------------------------------------------------- -->
+  <!-- --------------------------------------------------------------------------------------- -->
+
+  <!-- -----------------------------------    TAB  SIM Info    ---------------------------------- -->
+  <div id="content_0" class="tabcontent">
+    <div class="row">
+      <div class="col-1"></div>
+      <div class="col-10">
+        <div class="row">
+          <span class="steps-title m-2">To see the list of Reqistered SIM Cards :</span>
+          <button class="btn btn-secondary" type="button" onclick="getSims()">GET All SIM</button>
+        </div><hr>
+        <div class="row" id="all_sims_list"></div>
+        <hr><hr>
+      </div>
+      <div class="col-1"></div>
+    </div>
+  </div>
+
+  <!-- -----------------------------------    TAB  SIM Log    ------------------------------ -->
+  <div id="content_1" class="tabcontent" style="display:none;">
+    <div class="row">
+      <div class="col-1"></div>
+      <div class="col-10">
+        <div class="row">
+          <div class="col-4">
+            <span class="steps-title m-2">Please Indicate You Need Top and Number</span>
+          </div>
+          <div class="col-3">
+            <input class="form-control" id="need_top" type="text" placeholder="need top?" required/>
+          </div>
+          <div class="col-3">
+            <input class="form-control" id="need_count" type="text" placeholder="how many" required/>
+          </div>
+          <div class="col-2">
+            <button class="btn btn-secondary" type="button" onclick="getAggregatedSimLog()">Get Log</button>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-6">
+            <div class="card">
+              <div class="card-body">
+                <canvas id="myBarAggregatedChart1"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card">
+              <div class="card-body">
+                <canvas id="myBarAggregatedChart2"></canvas>
+              </div>
+            </div>
+          </div>
+          <!-- <div id="result_sim_log"></div> -->
+        </div><hr><hr>
+
+
+        <div class="row">
+          <span class="steps-title m-2">To insert new log for a customer, insert required info</span>
+          <div class="col-3">
+            <input class="form-control" id="insert_log_customer_no" type="text" placeholder="customerNo" required/>
+          </div>
+          <div class="col-2">
+            <input class="form-control" id="insert_log_data" type="text" placeholder="data usage" required/>
+          </div>
+          <div class="col-2">
+            <input class="form-control" id="insert_log_sms" type="text" placeholder="sms usage" required/>
+          </div>
+          <div class="col-2">
+            <input class="form-control" id="insert_log_date" type="text" placeholder="date" required/>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-secondary" type="button" onclick="insertNewLog()">Insert Log</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-1"></div>
+    </div>
+  </div>
+
+  <!-- -----------------------------------    TAB  Multi SIM LOG   ---------------------------- -->
+  <div id="content_2" class="tabcontent" style="display:none;">
+    <div class="row">
+      <div class="col-1"></div>
+      <div class="col-10">
+        <div class="row">
+          <div class="col-4">
+            <span class="steps-title m-2">Insert 3 Customer Numbers </span>
+          </div>
+          <div class="col-2">
+            <input class="form-control" id="customer_no0" type="text" placeholder="customerNo" required/>
+          </div>
+          <div class="col-2">
+            <input class="form-control" id="customer_no1" type="text" placeholder="customerNo" required/>
+          </div>
+          <div class="col-2">
+            <input class="form-control" id="customer_no2" type="text" placeholder="customerNo" required/>
+          </div>
+          <div class="col-2">
+            <button class="btn btn-secondary" type="button" onclick="get3SimLog_step1()">Get Log</button>
+          </div>
+        </div><hr>
+        
+        <div class="row">
+          <!-- <div id="result_multi_sim_log"></div> -->
+          <div class="col-6">
+            <div class="card">
+              <div class="card-body">
+                <canvas id="multiLineChart1"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card">
+              <div class="card-body">
+                <canvas id="multiLineChart2"></canvas>
+              </div>
+            </div>
+            
+          </div>
+        </div><hr><hr>
+
+        <div class="row">
+          <span class="steps-title m-2">To insert new log for a customer, insert required info</span>
+          <div class="col-3">
+            <input class="form-control" id="insert_log_customer_no" type="text" placeholder="customerNo" required/>
+          </div>
+          <div class="col-2">
+            <input class="form-control" id="insert_log_data" type="text" placeholder="data usage" required/>
+          </div>
+          <div class="col-2">
+            <input class="form-control" id="insert_log_sms" type="text" placeholder="sms usage" required/>
+          </div>
+          <div class="col-2">
+            <input class="form-control" id="insert_log_date" type="text" placeholder="date" required/>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-secondary" type="button" onclick="insertNewLog()">Insert Log</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-1"></div>
+    </div>
+  </div>
+
+  <!-- -----------------------------------    TAB  SIM ACTIVATION    ----------------------------- -->
+  <div id="content_3" class="tabcontent" style="display:none;">
+    <div class="row">
+      <div class="col-1"></div>
+      <div class="col-10">
+        <div class="row">
+          <div class="col-8">
+            
+            <div class="row">
+              <div class="col-6">
+                <span class="steps-title m-2">please write IMEI in currect format </span>
+              </div>
+              <div class="col-6">
+                <input class="form-control" id="imei_to_activation" type="text" placeholder="imei-1000000000" required/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <span class="steps-title m-2">And Activate / Pending </span>
+              </div>
+              <div class="col-6">
+                <input class="form-control" id="activate_or_pending" type="text" placeholder="Activate/Pending" required/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <span class="steps-title m-2">And Your Email Address to recieve result </span>
+              </div>
+              <div class="col-6">
+                <input class="form-control" id="email_activation" type="text" placeholder="email@gmail.com" required/>
+              </div>
+            </div>
+            <button class="btn btn-secondary" type="button" onclick="activateThis()">Now Activate/Pending This SIM</button>
+
+
+            <hr><hr><hr>
+            <div class="row">
+              <div class="col-4">
+                <span class="steps-title m-2">Insert The Customer Number </span>
+              </div>
+              <div class="col-4">
+                <input class="form-control" id="customer_no_activation" type="text" placeholder="customerNo" required/>
+              </div>
+              <div class="col-4">
+                <button class="btn btn-secondary" type="button" onclick="getActivationHistory()">Get Activation History</button>
+              </div>
+
+              <div class="row" id="activation_list"></div>
+            </div>
+
+            <hr>
+          </div>
+          <div class="col-4">
+            <div class="card">
+              <div class="card-body">
+                <canvas id="pie_chart_activation"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-1"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+
+</html>
