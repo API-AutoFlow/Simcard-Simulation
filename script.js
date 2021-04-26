@@ -221,7 +221,7 @@ function createActivationList(myList){
     drawBarChart(customer_list, all_datas_list[1][0], all_colors[1], all_titles[1],myBarAggregatedChart2);
   }
 function drawBarChart(customer_list, datas, color, title, chart_id) {
-    console.log(title);
+    // console.log(title);
     chart_id.data.labels = customer_list;
     chart_id.data.datasets[0].label = title;
     chart_id.data.datasets[0].data = datas;
