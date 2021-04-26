@@ -232,18 +232,34 @@ function drawBarChart(customer_list, datas, color, title, chart_id) {
 
 
   /********************************   Insert New Log                                        */
-function insertNewLog(){
-  var customerNo = document.getElementById("insert_log_customer_no").value;
-  var data = document.getElementById("insert_log_data").value;
-  var sms = document.getElementById("insert_log_sms").value;
-  var date = document.getElementById("insert_log_date").value;
+function insertNewLog1(){
+  var customerNo = document.getElementById("insert_log_customer_no1").value;
+  var data = document.getElementById("insert_log_data1").value;
+  var sms = document.getElementById("insert_log_sms1").value;
+  var date = document.getElementById("insert_log_date1").value;
+  // console.log('{"customer_no":"'+customerNo+'","sms":"'+sms+'","data":"'+data+'","date":"'+date+'"}');
+  xhr.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("need_top").value = "top";
+      document.getElementById("need_count").value = "10";
+      getAggregatedSimLog();
+    }
+  };
+  xhr.open("POST", "https://autoflow.navidelyasi.com/insert-sim-log", true);
+  xhr.send('{"customer_no":"'+customerNo+'","sms":"'+sms+'","data":"'+data+'","date":"'+date+'"}');
+
+}
+
+function insertNewLog2(){
+  var customerNo = document.getElementById("insert_log_customer_no2").value;
+  var data = document.getElementById("insert_log_data2").value;
+  var sms = document.getElementById("insert_log_sms2").value;
+  var date = document.getElementById("insert_log_date2").value;
+  // console.log('{"customer_no":"'+customerNo+'","sms":"'+sms+'","data":"'+data+'","date":"'+date+'"}');
   xhr.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       document.getElementById("customer_no2").value = customerNo;
       get3SimLog_step1();
-      document.getElementById("need_top").value = "top";
-      document.getElementById("need_count").value = "10";
-      getAggregatedSimLog();
     }
   };
   xhr.open("POST", "https://autoflow.navidelyasi.com/insert-sim-log", true);
