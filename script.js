@@ -45,7 +45,7 @@ const multiLineChart2 = new Chart(document.getElementById("multiLineChart2").get
 });
 
 const pieChartActivation = new Chart(document.getElementById("pie_chart_activation").getContext('2d'), {
-  type: 'doughnut',
+  type: 'pie',
   data: {
       labels: "",
       datasets: [{
@@ -73,7 +73,7 @@ const pieChartActivation = new Chart(document.getElementById("pie_chart_activati
       x[i].className = "nav-item nav-link";
     }
     document.getElementById(rudr_tab_id).className = 'nav-item nav-link active';
-    
+
   }
 
   /*************************************************************************************************/
