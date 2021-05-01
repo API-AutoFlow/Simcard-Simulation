@@ -73,9 +73,7 @@ const pieChartActivation = new Chart(document.getElementById("pie_chart_activati
       x[i].className = "nav-item nav-link";
     }
     document.getElementById(rudr_tab_id).className = 'nav-item nav-link active';
-    if (rudr_tab_id == "tb_3"){
-      getActivationHistory();
-    }
+    
   }
 
   /*************************************************************************************************/
