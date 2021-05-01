@@ -1,5 +1,5 @@
-// const url = "https://autoflow.navidelyasi.com/";
-const url = "http://127.0.0.1:2022/";
+const url = "https://autoflow.navidelyasi.com/";
+// const url = "http://127.0.0.1:2022/";
 const xhr = new XMLHttpRequest();
 
 const myBarAggregatedChart1 = new Chart(document.getElementById("myBarAggregatedChart1").getContext('2d'), {
