@@ -1,3 +1,5 @@
+// const url = "https://autoflow.navidelyasi.com/";
+const url = "http://127.0.0.1:2022/";
 const xhr = new XMLHttpRequest();
 
 const myBarAggregatedChart1 = new Chart(document.getElementById("myBarAggregatedChart1").getContext('2d'), {
@@ -78,26 +80,27 @@ const pieChartActivation = new Chart(document.getElementById("pie_chart_activati
 
   /*************************************************************************************************/
 
-
-
   /********************************  Activate SIM                                */
 function activateThis(){
-  var imeiNoActivation = makeCustomerNo(document.getElementById("imei_to_activation").value);
-  var activeOrPend = document.getElementById("activate_or_pending").value;
-  var emailActivation = document.getElementById("email_activation").value;
-
-  var msg = '{"customer_no":"'+ imeiNoActivation +'","status":"'+ activeOrPend +'","email":"'+ emailActivation +'"}'
-  console.log(msg);
-
-  xhr.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      
-      document.getElementById("customer_no_activation").value = imeiNoActivation;
-      getActivationHistory();
-    }
-  };
-  xhr.open("POST", "https://autoflow.navidelyasi.com/insert-sim-status", true);
-  xhr.send(msg);
+  var customerNo = document.getElementById("customer_no_to_activation").value;
+  var activeOrPend = document.getElementById("activate_or_pending").value.toLowerCase();
+  if(customerNo.length != 3){
+    alert("Customer Number should be 3 digits");
+  } else if (activeOrPend == "pending" || activeOrPend == "activate"){
+    var msg = '{"customer_no":"'+ customerNo +'","status":"'+ activeOrPend +'"}';
+    console.log("we are here 222");
+    xhr.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        
+        document.getElementById("customer_no_activation").value = customerNo;
+        getActivationHistory();
+      }
+    };
+    xhr.open("POST", url+"insert-sim-status", true);
+    xhr.send(msg);
+  } else {
+    alert("Status should be Activate or Pending");
+  }
 
 }
 
@@ -105,15 +108,20 @@ function activateThis(){
 function getActivationHistory(){
     document.getElementById("activation_list").innerHTML = "";
     var customerNoActivation = document.getElementById("customer_no_activation").value;
-    console.log("we are here :" + customerNoActivation);
-    xhr.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        createActivationList(JSON.parse(this.responseText).specific_customer);
-        drawPieChart_step1(JSON.parse(this.responseText).last_status_all);
-      }
-    };
-    xhr.open("POST", "https://autoflow.navidelyasi.com/get-sim-activation", true);
-    xhr.send("{\"customer_no\":\"" + customerNoActivation + "\"}");
+    if(customerNoActivation.length != 3){
+      alert("customer number should be 3 digits");
+    } else {
+      xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          // console.log(JSON.parse(this.responseText));
+          createActivationList(JSON.parse(this.responseText).specific_customer);
+          drawPieChart_step1(JSON.parse(this.responseText).last_status_all);
+        }
+      };
+      xhr.open("POST", url+"get-sim-activation", true);
+      xhr.send("{\"customer_no\":\"" + customerNoActivation + "\"}");
+
+    }
 }
 
 function createActivationList(myList){
@@ -136,7 +144,7 @@ function createActivationList(myList){
     var num_activate = 0;
     var i;
     for(i = 0; i < myList.length ; i++){
-      if (myList[i].status == "Activate"){
+      if (myList[i].status == "activate"){
         num_activate++;
       }
     }
@@ -151,18 +159,42 @@ function createActivationList(myList){
     pieChartActivation.data.datasets[0].borderColor = ['rgb(54, 162, 235)','rgb(255, 99, 132)'];
     pieChartActivation.reset();
     pieChartActivation.update();
+  }
 
+  /********************************  Insert New SIM                                   */
+  function insertSim(){
+    var imei = document.getElementById("insert-sim-imei").value;
+    var pin1 = document.getElementById("insert-sim-pin1").value;
+    var customer_no = document.getElementById("insert-sim-customer-no").value;
+    var specification = document.getElementById("insert-sim-specification").value;
+    var email = document.getElementById("insert-sim-email").value;
+    if (email.split("@").length==1||email.slice(email.length-4,email.length)!=".com"){
+      alert("Email is not correct");
+    } else if (imei.length>0&&pin1.length>0&&customer_no.length>0&&specification.length>0&&email.length>0){
+      xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          getSims();
+        }
+      };
+      xhr.open("POST", url+"insert-sim", true);
+      xhr.send('{"imei":"'+imei+'","pin1":"'+pin1+'","customer_no":"'
+          +customer_no+'","sim_specification":"'+specification+'","email":"'+email+'"}');
+    } else {
+      alert("you need to provide required info\n1- IMEI\n2- Pin 1\n3- Customer Number\n4- Specification\n5- Your Email");
+    }
   }
 
   /********************************  All SIM Info                                    */
   function getSims() {
     document.getElementById("all_sims_list").innerHTML = '';
+    console.log(url+"get-sims");
     xhr.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
           createSimList(JSON.parse(this.responseText));
+          console.log(JSON.parse(this.responseText));
       }
     };
-    xhr.open("GET", "https://autoflow.navidelyasi.com/get-sims", true);
+    xhr.open("GET", url+"get-sims", true);
     xhr.send();
   }
   function createSimList(myList){
@@ -183,15 +215,22 @@ function createActivationList(myList){
 
   /********************************   SIM Log                                        */
   function getAggregatedSimLog() {
-    var needTop = document.getElementById("need_top").value;
+    var needTop = document.getElementById("need_top").value.toLowerCase();
     var needCount = document.getElementById("need_count").value;
-    xhr.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        getAggregatedSimLog_Step2(JSON.parse(this.responseText), needTop);
-      }
-    };
-    xhr.open("POST", "https://autoflow.navidelyasi.com/aggregated-log", true);
-    xhr.send("{\"top\":\"" + needTop + "\",\"count\":\"" + needCount + "\"}");
+    if (needCount.length==0 || needTop.length==0){
+      alert("please provide information: \n1- top or last\n2- how many");
+    }else if (needTop=="top" || needTop=="last"){
+      xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          getAggregatedSimLog_Step2(JSON.parse(this.responseText), needTop);
+        }
+      };
+      xhr.open("POST", url+"aggregated-log", true);
+      xhr.send("{\"top\":\"" + needTop + "\",\"count\":\"" + needCount + "\"}");
+
+    }else{
+      alert("you need to mention top or last");
+    }
   }
   function getAggregatedSimLog_Step2(logOfData, needTop){
 
@@ -237,17 +276,21 @@ function insertNewLog1(){
   var data = document.getElementById("insert_log_data1").value;
   var sms = document.getElementById("insert_log_sms1").value;
   var date = document.getElementById("insert_log_date1").value;
-  // console.log('{"customer_no":"'+customerNo+'","sms":"'+sms+'","data":"'+data+'","date":"'+date+'"}');
-  xhr.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("need_top").value = "top";
-      document.getElementById("need_count").value = "10";
-      getAggregatedSimLog();
-    }
-  };
-  xhr.open("POST", "https://autoflow.navidelyasi.com/insert-sim-log", true);
-  xhr.send('{"customer_no":"'+customerNo+'","sms":"'+sms+'","data":"'+data+'","date":"'+date+'"}');
+  if(customerNo.length==0||data.length==0||sms.length==0||date.length==0){
+    alert("you need to provide required data");
+  } else{
+    // console.log('{"customer_no":"'+customerNo+'","sms":"'+sms+'","data":"'+data+'","date":"'+date+'"}');
+    xhr.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("need_top").value = "top";
+        document.getElementById("need_count").value = "10";
+        getAggregatedSimLog();
+      }
+    };
+    xhr.open("POST", url+"insert-sim-log", true);
+    xhr.send('{"customer_no":"'+customerNo+'","sms":"'+sms+'","data":"'+data+'","date":"'+date+'"}')
 
+  }
 }
 
 function insertNewLog2(){
@@ -255,16 +298,19 @@ function insertNewLog2(){
   var data = document.getElementById("insert_log_data2").value;
   var sms = document.getElementById("insert_log_sms2").value;
   var date = document.getElementById("insert_log_date2").value;
-  console.log('{"customer_no":"'+customerNo+'","sms":"'+sms+'","data":"'+data+'","date":"'+date+'"}');
-  xhr.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("customer_no2").value = customerNo;
-      get3SimLog_step1();
-    }
-  };
-  xhr.open("POST", "https://autoflow.navidelyasi.com/insert-sim-log", true);
-  xhr.send('{"customer_no":"'+customerNo+'","sms":"'+sms+'","data":"'+data+'","date":"'+date+'"}');
-
+  if (customerNo.length==0||data.length==0||sms.length==0||date.length==0){
+    alert("you need to provide required data");
+  } else {
+    // console.log('{"customer_no":"'+customerNo+'","sms":"'+sms+'","data":"'+data+'","date":"'+date+'"}');
+    xhr.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("customer_no2").value = customerNo;
+        get3SimLog_step1();
+      }
+    };
+    xhr.open("POST", url+"insert-sim-log", true);
+    xhr.send('{"customer_no":"'+customerNo+'","sms":"'+sms+'","data":"'+data+'","date":"'+date+'"}');
+  }
 }
 
   /********************************   Multi SIM Log                                        */
@@ -278,7 +324,11 @@ function insertNewLog2(){
       }
     }
     i = 0;
-    getMultiSimLog(i, logMultiSim);
+    if(logMultiSim.length==0){
+      alert("you have to mention at least one customer number");
+    } else {
+      getMultiSimLog(i, logMultiSim);
+    }
   }
   function getMultiSimLog(counter, logMultiSim) {
     var customerNo = logMultiSim[counter];
@@ -293,7 +343,7 @@ function insertNewLog2(){
           }
       }
     };
-    xhr.open("POST", "https://autoflow.navidelyasi.com/get-sim-log", true);
+    xhr.open("POST", url+"get-sim-log", true);
     xhr.send("{\"customer_no\":\"" + customerNo + "\"}");
   }
   function get3SimLog_step2(logMultiSim){
@@ -346,11 +396,6 @@ function insertNewLog2(){
 function makeColorTransparent(color){
     let n = color.length;
     return color.slice(0,n-1)+", 0.5)";
-}
-
-function makeCustomerNo(msg){
-  let n = msg.length;
-  return msg.slice(5,n);
 }
 
 

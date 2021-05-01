@@ -29,8 +29,8 @@
     <div class="col-10">
       <ul class="nav nav-pills nav-justified">
         <li><a href="javascript:rudrSwitchTab('tb_0', 'content_0');" id="tb_0" class="nav-item nav-link active">  SIM Info  </a></li>
-        <li><a href="javascript:rudrSwitchTab('tb_1', 'content_1');" id="tb_1" class="nav-item nav-link">  SIM Log  </a></li>
-        <li><a href="javascript:rudrSwitchTab('tb_2', 'content_2');" id="tb_2" class="nav-item nav-link">  Multi SIM Log  </a></li>
+        <li><a href="javascript:rudrSwitchTab('tb_1', 'content_1');" id="tb_1" class="nav-item nav-link">  Aggregated Usage Log  </a></li>
+        <li><a href="javascript:rudrSwitchTab('tb_2', 'content_2');" id="tb_2" class="nav-item nav-link">  SIM Usage Comparison  </a></li>
         <li><a href="javascript:rudrSwitchTab('tb_3', 'content_3');" id="tb_3" class="nav-item nav-link">  SIM Activation Status </a></li>
       </ul>
     </div>
@@ -50,27 +50,54 @@
       <div class="col-1"></div>
       <div class="col-10">
         <div class="row">
-          <span class="steps-title m-2">To see the list of Reqistered SIM Cards :</span>
-          <button class="btn btn-secondary" type="button" onclick="getSims()">GET All SIM</button>
-        </div><hr>
-        <div class="row" id="all_sims_list"></div>
-        <hr><hr>
+          <div class="col-8">
+            <div class="row">
+              <span class="steps-title m-2">To see the list of Reqistered SIM Cards :</span>
+              <button class="btn btn-secondary" type="button" onclick="getSims()">GET All SIM</button>
+            </div><hr>
+            <div class="row" id="all_sims_list"></div>
+          </div>
+          <div class="col-4">
+            <span class="steps-title m-2">To insert new SIM,</span>
+            <br>
+            <span class="steps-title m-2">Please provide required information</span>
+            <br><hr>
+            <span class="steps-title m-2">1- IMEI :</span>
+            <input class="form-control" id="insert-sim-imei" type="text" placeholder="imei-1000000306" required/>
+            <br>
+            <span class="steps-title m-2">2- Pin 1 :</span>
+            <input class="form-control" id="insert-sim-pin1" type="text" placeholder="1234" required/>
+            <br>
+            <span class="steps-title m-2">3- Customer Number :</span>
+            <input class="form-control" id="insert-sim-customer-no" type="text" placeholder="306" required/>
+            <br>
+            <span class="steps-title m-2">4- SIM Specification :</span>
+            <input class="form-control" id="insert-sim-specification" type="text" placeholder="GEM_TSA008_TSG005_TRIO_EP0013" required/>
+            <br>
+            <span class="steps-title m-2">5- Your Email Address :</span>
+            <input class="form-control" id="insert-sim-email" type="text" placeholder="name@example.com" required/>
+            <br>
+            <button class="btn btn-secondary" type="button" onclick="insertSim()">Insert new SIM</button>
+
+          </div>
+        </div>
+        
       </div>
       <div class="col-1"></div>
     </div>
   </div>
 
-  <!-- -----------------------------------    TAB  SIM Log    ------------------------------ -->
+  <!-- -----------------------------------    Aggregated SIM USAGE    ------------------------------ -->
   <div id="content_1" class="tabcontent" style="display:none;">
     <div class="row">
       <div class="col-1"></div>
       <div class="col-10">
         <div class="row">
           <div class="col-4">
-            <span class="steps-title m-2">Please Indicate You Need Top and Number</span>
+            <span class="steps-title m-2">Please indicate how many of top/last users</span>
           </div>
           <div class="col-3">
-            <input class="form-control" id="need_top" type="text" placeholder="need top?" required/>
+            <input class="form-control" id="need_top" type="text" placeholder="top / last" required/>
           </div>
           <div class="col-3">
             <input class="form-control" id="need_count" type="text" placeholder="how many" required/>
@@ -111,7 +138,7 @@
             <input class="form-control" id="insert_log_sms1" type="text" placeholder="sms usage" required/>
           </div>
           <div class="col-2">
-            <input class="form-control" id="insert_log_date1" type="text" placeholder="date" required/>
+            <input class="form-control" id="insert_log_date1" type="date" required/>
           </div>
           <div class="col-3">
             <button class="btn btn-secondary" type="button" onclick="insertNewLog1()">Insert Log</button>
@@ -123,14 +150,14 @@
     </div>
   </div>
 
-  <!-- -----------------------------------    TAB  Multi SIM LOG   ---------------------------- -->
+  <!-- -----------------------------------   SIM Usage Comparison   ---------------------------- -->
   <div id="content_2" class="tabcontent" style="display:none;">
     <div class="row">
       <div class="col-1"></div>
       <div class="col-10">
         <div class="row">
           <div class="col-4">
-            <span class="steps-title m-2">Insert 3 Customer Numbers </span>
+            <span class="steps-title m-2">You can insert up to 3 Customer Numbers </span>
           </div>
           <div class="col-2">
             <input class="form-control" id="customer_no0" type="text" placeholder="customerNo" required/>
@@ -177,7 +204,7 @@
             <input class="form-control" id="insert_log_sms2" type="text" placeholder="sms usage" required/>
           </div>
           <div class="col-2">
-            <input class="form-control" id="insert_log_date2" type="text" placeholder="date" required/>
+            <input class="form-control" id="insert_log_date2" type="date" required/>
           </div>
           <div class="col-3">
             <button class="btn btn-secondary" type="button" onclick="insertNewLog2()">Insert Log</button>
@@ -199,26 +226,18 @@
             
             <div class="row">
               <div class="col-6">
-                <span class="steps-title m-2">please write IMEI in currect format </span>
+                <span class="steps-title m-2">please write Customer Number here </span>
               </div>
               <div class="col-6">
-                <input class="form-control" id="imei_to_activation" type="text" placeholder="imei-1000000000" required/>
+                <input class="form-control" id="customer_no_to_activation" type="text" placeholder="001" required/>
               </div>
             </div>
             <div class="row">
               <div class="col-6">
-                <span class="steps-title m-2">And Activate / Pending </span>
+                <span class="steps-title m-2">And Status: activate/pending </span>
               </div>
               <div class="col-6">
                 <input class="form-control" id="activate_or_pending" type="text" placeholder="Activate/Pending" required/>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                <span class="steps-title m-2">And Your Email Address to recieve result </span>
-              </div>
-              <div class="col-6">
-                <input class="form-control" id="email_activation" type="text" placeholder="email@gmail.com" required/>
               </div>
             </div>
             <button class="btn btn-secondary" type="button" onclick="activateThis()">Now Activate/Pending This SIM</button>
