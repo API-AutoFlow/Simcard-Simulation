@@ -12,6 +12,22 @@ const myBarAggregatedChart1 = new Chart(document.getElementById("myBarAggregated
                 backgroundColor: "",
                 borderColor: "",
             }]
+    },
+    options: {
+      scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Customer Number'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Data Usage (MB)'
+            }
+          }
+      }
     }
 });
 
@@ -25,6 +41,22 @@ const myBarAggregatedChart2 = new Chart(document.getElementById("myBarAggregated
                 backgroundColor: "",
                 borderColor: "",
             }]
+    },
+    options: {
+      scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Customer Number'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'SMS Usage'
+            }
+          }
+      }
     }
 });
 
@@ -33,6 +65,22 @@ const multiLineChart1 = new Chart(document.getElementById("multiLineChart1").get
     data: {
         labels: "",
         datasets: ""
+    },
+    options: {
+      scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Date'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Data Usage (MB)'
+            }
+          }
+      }
     }
 });
 
@@ -41,6 +89,22 @@ const multiLineChart2 = new Chart(document.getElementById("multiLineChart2").get
     data: {
         labels: "",
         datasets: ""
+    },
+    options: {
+      scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Date'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'SMS Usage'
+            }
+          }
+      }
     }
 });
 
@@ -242,7 +306,7 @@ function createActivationList(myList){
     }else{
         all_colors = ['rgb(158, 137, 0)','rgb(0, 158, 87)'];
     }
-    let all_titles = ["Data Usage","SMS Usage"];
+    let all_titles = ["Data Usage (MB)","SMS Usage"];
     var i;
 
     for(i=0;i<logOfData.length;i++){
